@@ -1,22 +1,9 @@
-/*
- * Copyright (C) 2008 feilong
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *         http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package net.ijiangtao.tech.maven.web.controller;
 
-import com.alibaba.fastjson.JSONObject;
-
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -26,22 +13,19 @@ import java.util.*;
 import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
 
 /**
- *
- *
- *
  * @author ijiangtao
  */
 @Controller
+@Api(value = "", description = "git info from git-commit-id-plugin")
 public class GitCommitController {
 
-
     /**
-     *
      * @return
      */
     @RequestMapping("/git/commit/info")
     @ResponseBody
-    public String showGitCommitInfo(){
+    @ApiOperation(value = "get commit info", httpMethod = "GET")
+    public String showGitCommitInfo() {
         //git.properties
         ResourceBundle resourceBundle = ResourceBundle.getBundle("git", defaultIfNull(null, Locale.getDefault()));
 
@@ -49,26 +33,24 @@ public class GitCommitController {
 
         Enumeration<String> keysEnumeration = resourceBundle.getKeys();
 
-        while (keysEnumeration.hasMoreElements()){
+        while (keysEnumeration.hasMoreElements()) {
             String key = keysEnumeration.nextElement();
+
             map.put(key, resourceBundle.getString(key));
         }
 
-        JSONObject jsonObject=new JSONObject();
-        jsonObject.putAll(map);
-
-        return jsonObject.toJSONString();
+        return JSON.toJSONString(map, SerializerFeature.PrettyFormat);
     }
 
     /**
-     *
      * @return
      */
+    @ApiOperation(value = "get commit id", httpMethod = "GET")
     @RequestMapping("/git/commit/id")
     @ResponseBody
-    public String showGitCommitId(){
+    public String showGitCommitId() {
         //git.properties
-        ResourceBundle resourceBundle = ResourceBundle.getBundle( "git", defaultIfNull(null, Locale.getDefault()));
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("git", defaultIfNull(null, Locale.getDefault()));
         return resourceBundle.getString("git.commit.id");
     }
 

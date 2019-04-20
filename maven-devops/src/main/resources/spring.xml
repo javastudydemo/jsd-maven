@@ -11,15 +11,9 @@
             http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
 
 	<aop:aspectj-autoproxy />
+
     <context:annotation-config />
+
 	<context:component-scan base-package="net.ijiangtao.tech.maven" />
 
-	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="locations">
-			<list>
-				<value>classpath:config/*.properties</value>
-			</list>
-		</property>
-	</bean>
-    	
 </beans>
