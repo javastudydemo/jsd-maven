@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>net.ijiangtao.tech.maven</groupId>
+    <artifactId>maven-devops</artifactId>
+    <version>1.1.01.01-SNAPSHOT</version>
+
+    <packaging>war</packaging>
+
+    <properties>
+
+        <!-- maven-compiler-plugin -->
+        <maven-compiler-plugin.source>1.8</maven-compiler-plugin.source>
+        <maven-compiler-plugin.target>1.8</maven-compiler-plugin.target>
+        <maven-compiler-plugin.encoding>UTF-8</maven-compiler-plugin.encoding>
+        <maven-compiler-plugin.version>3.5.1</maven-compiler-plugin.version>
+
+        <!-- jetty-maven-plugin -->
+        <version.jetty-maven-plugin>9.3.3.v20150827</version.jetty-maven-plugin>
+        <jettyPlugin.port>8241</jettyPlugin.port>
+        <jettyPlugin.stopPort>9812</jettyPlugin.stopPort>
+
+        <!-- springmvc swagger -->
+        <version.swagger.springmvc>1.0.2</version.swagger.springmvc>
+
+        <!-- spring -->
+        <spring.version>4.3.22.RELEASE</spring.version>
+
+        <git-commit-id-plugin.version>2.2.6</git-commit-id-plugin.version>
+
+    </properties>
+
+    <profiles>
+
+        <!-- 分环境profile> -->
+        <profile>
+            <id>dev</id>
+            <!-- 如果dev带上activeByDefault，会默认将dev下的配置复制到config目录下-->
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <env>dev</env>
+                <package.target>dev</package.target>
+                <spring.profiles.active.value>dev</spring.profiles.active.value>
+                <yui.skip>true</yui.skip>
+                <config.path>src/main/resources/config/dev</config.path>
+            </properties>
+        </profile>
+
+        <!--sit-->
+        <profile>
+            <id>sit</id>
+            <properties>
+                <env>sit</env>
+                <package.target>sit</package.target>
+                <spring.profiles.active.value>sit</spring.profiles.active.value>
+                <yui.skip>false</yui.skip>
+                <config.path>src/main/resources/config/sit</config.path>
+            </properties>
+        </profile>
+
+        <!-- uat -->
+        <profile>
+            <id>uat</id>
+            <properties>
+                <env>uat</env>
+                <package.target>uat</package.target>
+                <spring.profiles.active.value>uat</spring.profiles.active.value>
+                <yui.skip>false</yui.skip>
+                <config.path>src/main/resources/config/uat</config.path>
+            </properties>
+        </profile>
+
+        <!--sandbox-->
+        <profile>
+            <id>sandbox</id>
+            <properties>
+                <env>sandbox</env>
+                <package.target>sandbox</package.target>
+                <spring.profiles.active.value>sandbox</spring.profiles.active.value>
+                <yui.skip>false</yui.skip>
+                <config.path>src/main/resources/config/sandbox</config.path>
+            </properties>
+        </profile>
+
+        <!--prod-->
+        <profile>
+            <id>prod</id>
+            <properties>
+                <env>prod</env>
+                <package.target>prod</package.target>
+                <spring.profiles.active.value>prod</spring.profiles.active.value>
+                <yui.skip>false</yui.skip>
+                <config.path>src/main/resources/config/prod</config.path>
+            </properties>
+        </profile>
+
+    </profiles>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${spring.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- swagger -->
+        <dependency>
+            <groupId>com.mangofactory</groupId>
+            <artifactId>swagger-springmvc</artifactId>
+            <version>${version.swagger.springmvc}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>2.6.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.6.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.6.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.1.23</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aop</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>1.9.2</version>
+        </dependency>
+
+
+        <!-- test -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+
+
+        <!-- log -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.25</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.7.12</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.9</version>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+
+            <!-- maven-resources-plugin -->
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.6</version>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/classes/config</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${config.path}/</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+
+            <!-- https://github.com/git-commit-id/maven-git-commit-id-plugin -->
+            <plugin>
+                <groupId>pl.project13.maven</groupId>
+                <artifactId>git-commit-id-plugin</artifactId>
+                <version>${git-commit-id-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>get-the-git-infos</id>
+                        <goals>
+                            <goal>revision</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <!-- 使properties扩展到整个maven bulid 周期, Ref: https://github.com/ktoso/maven-git-commit-id-plugin/issues/280 -->
+                    <injectAllReactorProjects>true</injectAllReactorProjects>
+                    <dateFormat>yyyy.MM.dd HH:mm:ss</dateFormat>
+                    <verbose>true</verbose>
+                    <!-- 是否生 git.properties 属性文件 -->
+                    <generateGitPropertiesFile>true</generateGitPropertiesFile>
+                    <!--git描述配置,可选;由JGit提供实现; -->
+                    <gitDescribe>
+                        <!--是否生成描述属性 -->
+                        <skip>false</skip>
+                        <!--提交操作未发现tag时,仅打印提交操作ID -->
+                        <always>false</always>
+                        <!--提交操作ID显式字符长度,最大值为:40;默认值:7; 0代表特殊意义;-->
+                        <abbrev>7</abbrev>
+                        <!--构建触发时,代码有修改时(即"dirty state"),添加指定后缀;默认值:""; -->
+                        <dirty>-dirty</dirty>
+                        <forceLongFormat>false</forceLongFormat>
+                    </gitDescribe>
+                </configuration>
+            </plugin>
+
+            <!-- jetty-maven-plugin -->
+            <plugin>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>${version.jetty-maven-plugin}</version>
+                <configuration>
+                    <httpConnector>
+                        <port>${jettyPlugin.port}</port>
+                    </httpConnector>
+                    <stopKey>shutdown</stopKey>
+                    <stopPort>${jettyPlugin.stopPort}</stopPort>
+                    <scanIntervalSeconds>2</scanIntervalSeconds>
+                    <!-- <reload>manual</reload> -->
+                    <dumpOnStart>true</dumpOnStart>
+                    <webApp>
+                        <contextPath>/</contextPath>
+                        <defaultsDescriptor>jettyCustom.xml</defaultsDescriptor>
+                    </webApp>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <inherited>true</inherited>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
+                <configuration>
+                    <source>${maven-compiler-plugin.source}</source>
+                    <target>${maven-compiler-plugin.target}</target>
+                    <encoding>${maven-compiler-plugin.encoding}</encoding>
+                    <detail>true</detail>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+
+
+</project>
